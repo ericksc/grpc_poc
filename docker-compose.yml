@@ -1,0 +1,26 @@
+name: greeter
+services:
+  greeter_server:
+    image: grpc_poc/greeter_server
+    pull_policy: never
+    build:
+      context: greeter_server
+    container_name: "greeter_server"
+    command: python3 greeter_server.py
+    ports:
+    - "50051:50051"
+    volumes:
+      - ./:/app
+
+  greeter_client:
+    image: grpc_poc/greeter_client
+    pull_policy: never
+    container_name: "greeter_client"
+    build:
+      context: greeter_client
+    depends_on:
+      - greeter_server
+    volumes:
+      - ./:/app
+    command: python3 greeter_client.py
+
